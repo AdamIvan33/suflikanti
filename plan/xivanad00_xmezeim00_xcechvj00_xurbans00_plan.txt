@@ -1,0 +1,28 @@
+Termíny projektu:
+	23.3. - hotové testy pre mat. knižnicu + MakeFile
+	30.3. - Matematická knižnica, Kalkulačka GUI
+	6.4. - profiling + užívateľská príručka
+	13.4. - inštalátor, odinštalátor + programová dokumentácia
+	20.4. - mockup
+	
+
+Rozdelenie úloh:
+	Testy pre matematickú knižnicu: Adam Ivan, Martin Mezei (PyTest)
+	Makefile: Juraj Čechvala, Šimon Urban (prispôsobený pre Python)
+	Matematická knižnica: Adam Ivan, Martin Mezei (Python)
+	Kalkulačka GUI: Juraj Čechvala, Šimon Urban (tkinter)
+	Profiling: Juraj Čechvala, Martin Mezei (Python)
+	Užívateľská príručka: Adam Ivan, Šimon Urban
+	inštalátor / odinštalátor: celý tím
+	programová dokumentácia: (generovaná automaticky cez DoxyGen)
+	mockup: celý tím
+	debugging: v priebehu podľa potreby pri implementácií mat. knižnice a profilingu
+
+
+Komunikačné kanály:
+	Discord kanál vytvorený pre projekt
+	Trello.com pre organizáciu a rozloženie práce
+
+Systém pre správu verzií:
+	Github
+	https://github.com/AdamIvan33/suflikanti
