@@ -8,10 +8,10 @@ Autori
 ------
 
 Nazev tymu
-- xlogin01 jmeno prijmeni 
-- xlogin02 jmeno prijmeni 
-- xlogin03 jmeno prijmeni 
-- xlogin04 jmeno prijmeni 
+- xcechvj00 Juraj Čechvala
+- xivanad00 Adam Ivan
+- xmezeim00 Martin Mezei 
+- xurbans00 Šimon Urban_
 
 Licence
 -------
