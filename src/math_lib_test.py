@@ -26,6 +26,8 @@ def test_modulo():
     assert math_lib.modulo(1000000000, 987654321) == 12345679
     assert math_lib.modulo(1, 2) == 1
     assert math_lib.modulo(-9876543210, 123456789) == 123456699
+    with pytest.raises(ZeroDivisionError, match="Modulo by zero is not allowed."):
+        math_lib.modulo(3, 0)
 
 @pytest.mark.parametrize("a,b,expected"  #test data for test_addition()
 [
