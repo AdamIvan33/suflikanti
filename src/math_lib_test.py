@@ -1,6 +1,10 @@
 import math_lib
 import pytest
 
+#TODO: all test inputs with paramatrize?
+#TODO: add a test case for factorial - user input is float; should raise ValueError
+#TODO: add a test case for n_root - user input is float; should raise ValueError
+
 def test_n_power():
     assert math_lib.n_power(2, 3) == 8
     assert math_lib.n_power(-2, 3) == -8
@@ -69,7 +73,7 @@ def test_substraction(a,b,expected):
 
 def test_division(a,b,expected):
     assert math_lib.div(a,b)==expected
-    with pytest.raises(ValueError, match="Cannot divide with 0"):
+    with pytest.raises(ValueError, match="Cannot divide with 0"):  #TODO: change ValueError to ZeroDivisionError
         math_lib.div(2,0)
 
 
