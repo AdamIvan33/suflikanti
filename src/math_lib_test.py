@@ -18,11 +18,11 @@ def test_n_root():
     assert math_lib.n_root(27, 3) == 3
     assert math_lib.n_root(16, 2) == 4
     assert round(math_lib.n_root(2, 2), 5) == 1.41421
-    with pytest.raises(ValueError, match="The exponent n must be a natural number"):
+    with pytest.raises(ValueError, match="The radical n must be a natural number"):
         math_lib.n_root(2, 0)
-    with pytest.raises(ValueError, match="The exponent n must be a natural number"):
+    with pytest.raises(ValueError, match="The radical n must be a natural number"):
         math_lib.n_root(2, -1)
-    with pytest.raises(ValueError, match="The exponent n must be a natural number"):
+    with pytest.raises(ValueError, match="The radical n must be a natural number"):
         math_lib.n_root(2, 1.5)
 
 def test_modulo():

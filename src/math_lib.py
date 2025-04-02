@@ -140,9 +140,9 @@ def n_power(number1, number2):
 def n_root(number1, number2):
 
     if number2 <= 0: 
-        raise ValueError("The exponent n must be a natural number")
+        raise ValueError("The radical n must be a natural number")
 
     if type(number2) is float: #checks if number is natural
-        raise ValueError("The exponent n must be a natural number")
+        raise ValueError("The radical n must be a natural number")
     
     return number1**(1/number2)
