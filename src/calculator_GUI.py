@@ -214,7 +214,7 @@ def handle_abs():
         input_label.config(text="Error")
         print("Absolute error:", e)
 
-## @brief Handles factorial operation (x!)
+## @brief Handles factorial operation (!)
 #  @return Updates input label with factorial result
 
 def handle_fact():
