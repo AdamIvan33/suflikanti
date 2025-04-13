@@ -123,7 +123,7 @@ def n_power(number1, number2):
     if number2 < 0: 
         raise ValueError("The exponent n must be a natural number, or 0")
 
-    if type(number2) is float: #checks if number is natural
+    if not float(number2).is_integer(): #checks if number is natural
         raise ValueError("The exponent n must be a natural number, or 0")
     
     return number1**number2
@@ -142,7 +142,7 @@ def n_root(number1, number2):
     if number2 <= 0: 
         raise ValueError("The radical n must be a natural number")
 
-    if type(number2) is float: #checks if number is natural
+    if not float(number2).is_integer(): #checks if number is natural
         raise ValueError("The radical n must be a natural number")
     
     return number1**(1/number2)
