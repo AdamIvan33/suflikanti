@@ -28,7 +28,7 @@ just_evaluated = False         # @brief Tracks if the last operation was evaluat
 ## GUI Window Setup
 window = Tk()
 window.geometry("480x720")
-window.title("Kalkulačka I guess")
+window.title("Calculator")
 
 ## Set application icon using a PNG file
 icon = PhotoImage(file='logo.png')
