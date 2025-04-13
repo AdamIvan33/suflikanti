@@ -2,7 +2,7 @@
 #  @brief GUI with history and error display
 #  @author Šimon Urban
 #  
-#  This module provides basic user interfece for the calculator
+#  This module provides basic user interface for the calculator
 
 ## @file
 #  @brief GUI-based calculator application using tkinter with support for basic arithmetic and scientific operations
