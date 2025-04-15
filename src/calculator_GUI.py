@@ -5,6 +5,7 @@
 #  This module provides basic user interface for the calculator
 
 from tkinter import *
+from tkinter import messagebox
 import os
 import sys
 import math_lib
@@ -79,6 +80,12 @@ if buttons:
 def format_number(n):
     return int(n) if float(n).is_integer() else round(n, 8)
 
+## @brief Show error in popup message window
+#  @param message Error message to display
+
+def show_error(message):
+    messagebox.showerror("Calculation Error", message)
+
 ## @brief Clears all calculator state and resets display
 
 def clear_all():
@@ -113,7 +120,6 @@ def update_input(value):
 
     if just_evaluated and value not in {"C", "⌫"}:
         clear_all()
-
     if value == "C":
         clear_all()
     elif value == "⌫":
@@ -126,7 +132,7 @@ def update_input(value):
         handle_abs()
     elif value == "!":
         handle_fact()
-    elif value.isdigit() or (value == "-" and not current_input and not operand and not current_operator):
+    elif value.isdigit() or (value == "-" and (not current_input or current_input == "-")):
         handle_digit(value)
 
     input_label.config(text=current_input if current_input else "0")
@@ -135,10 +141,14 @@ def update_input(value):
 #  @param digit The string representing the digit (0–9) or negative sign ('-')
 #
 #  Builds up the number the user is typing. Called each time the user clicks a digit.
-
+# Allow toggling minus sign at the beginning
 def handle_digit(digit):
     global current_input
-    current_input += digit
+    
+    if digit == "-" and current_input == "-":
+        current_input = ""
+    else:
+        current_input += digit
 
 ## @brief Handles operator button press and stores operand/operator
 #  @param op Operator character pressed
@@ -146,20 +156,19 @@ def handle_digit(digit):
 #  Evaluates any existing operation if operand and operator are already set,
 #  then stores result as new operand and prepares for next input.
 #  Also supports using '-' to type negative numbers.
+# If the user is entering a negative number, allow '-' to be part of input
 
 def handle_operator(op):
     global current_input, operand, current_operator, history_input, just_evaluated
 
-    if op == "-" and not operand and not current_input:
-        current_input = "-"
-        input_label.config(text=current_input)
+    
+    if op == "-" and (not current_input or current_input == "-"):
+        handle_digit("-")
         return
 
-    # If we already have everything needed to compute, do it now
     if current_operator and current_input:
         handle_equal(chain=True)
 
-    # Store operand and operator for next operation
     if current_input:
         operand = float(current_input)
         current_input = ""
@@ -222,7 +231,7 @@ def handle_equal(chain=False):
 
     except Exception as e:
         input_label.config(text="Error")
-        print(f"[Error] {e}")
+        show_error(str(e))
 
 ## @brief Handles absolute value operation (|x|)
 #  @return Updates input label with absolute value
@@ -240,7 +249,7 @@ def handle_abs():
             just_evaluated = True
     except Exception as e:
         input_label.config(text="Error")
-        print("Absolute error:", e)
+        show_error(str(e))
 
 ## @brief Handles factorial operation (!)
 #  @return Updates input label with factorial result
@@ -258,7 +267,7 @@ def handle_fact():
             just_evaluated = True
     except Exception as e:
         input_label.config(text="Error")
-        print("Factorial error:", e)
+        show_error(str(e))
 
 ## @brief Create and place calculator buttons
 for row_index, row in enumerate(buttons):
@@ -285,5 +294,6 @@ input_label.config(text="0")
 window.mainloop()
 
 ## TODO
-# @todo Fix operand "-" so it can be always put in front of all numbers, not just in front of the first number (-42 * -42)
+# @todo Add decimal numbers
 # @todo Make all buttons the same size
+# @todo Allow result usage after "="
