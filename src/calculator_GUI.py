@@ -4,10 +4,6 @@
 #  
 #  This module provides basic user interface for the calculator
 
-## @file
-#  @brief GUI-based calculator application using tkinter with support for basic arithmetic and scientific operations
-#  @author
-
 from tkinter import *
 import os
 import sys
@@ -31,6 +27,7 @@ window.geometry("480x720")
 window.title("Calculator")
 
 ## Set application icon using a PNG file
+# Set application background colour
 icon = PhotoImage(file='logo.png')
 window.iconphoto(True, icon)
 window.config(background="#E79A3F")
@@ -42,10 +39,12 @@ display_frame = Frame(window, bg="#E79A3F")
 display_frame.pack(fill="x", padx=10, pady=10)
 
 ## Label showing the previously entered values or result history
+#  Located on the top of the display_frame
 history_label = Label(display_frame, text=history_input, anchor="e", font=("Arial", 16), bg="#E79A3F", fg="#444")
 history_label.pack(fill="x")
 
 ## Label showing the current number input or result
+#  Located on the bottom of the display_frame
 input_label = Label(display_frame, text="0", anchor="e", font=("Arial", 32), bg="#E79A3F", fg="#000")
 input_label.pack(fill="x")
 
@@ -60,14 +59,18 @@ buttons = [
 ]
 
 ## Frame to contain the button grid
+#  Pack buttons so they fill out the frame
 button_frame = Frame(window, bg="#E79A3F")
 button_frame.pack(expand=True, fill="both")
 
 ## Configure the rows and columns of the button grid to expand equally
 for i in range(len(buttons)):
     button_frame.grid_rowconfigure(i, weight=1)
-for j in range(5):
-    button_frame.grid_columnconfigure(j, weight=1)
+
+if buttons:
+    num_cols = len(buttons[0])
+    for j in range(num_cols):
+        button_frame.grid_columnconfigure(j, weight=1)
 
 ## @brief Converts float to int if it's a whole number
 #  @param n The number to format
@@ -97,6 +100,13 @@ def backspace():
 
 ## @brief Main handler for all button presses
 #  @param value The label of the button pressed
+#
+#  This function routes each button press to the appropriate handler depending on the type:
+#  - Digits are added to the input string
+#  - Operators are saved for later evaluation
+#  - '=' triggers computation
+#  - Utility buttons like 'C', '⌫', '|x|' and '!' trigger their own logic
+#  If the last action was '=', pressing any new button clears the state to start a fresh calculation.
 
 def update_input(value):
     global just_evaluated
@@ -122,7 +132,9 @@ def update_input(value):
     input_label.config(text=current_input if current_input else "0")
 
 ## @brief Appends digit or sign to current input string
-#  @param digit String value representing a digit or negative sign
+#  @param digit The string representing the digit (0–9) or negative sign ('-')
+#
+#  Builds up the number the user is typing. Called each time the user clicks a digit.
 
 def handle_digit(digit):
     global current_input
@@ -130,29 +142,42 @@ def handle_digit(digit):
 
 ## @brief Handles operator button press and stores operand/operator
 #  @param op Operator character pressed
+#
+#  Evaluates any existing operation if operand and operator are already set,
+#  then stores result as new operand and prepares for next input.
+#  Also supports using '-' to type negative numbers.
 
 def handle_operator(op):
-    global current_input, operand, current_operator, history_input
+    global current_input, operand, current_operator, history_input, just_evaluated
 
     if op == "-" and not operand and not current_input:
         current_input = "-"
         input_label.config(text=current_input)
         return
 
+    # If we already have everything needed to compute, do it now
     if current_operator and current_input:
         handle_equal(chain=True)
 
+    # Store operand and operator for next operation
     if current_input:
         operand = float(current_input)
-        current_operator = op
         current_input = ""
-        history_input = f"{format_number(operand)}{op}"
-        history_label.config(text=history_input)
-        input_label.config(text="0")
+
+    current_operator = op
+    history_input = f"{format_number(operand)}{op}"
+    history_label.config(text=history_input)
+    input_label.config(text="0")
+    just_evaluated = False
+
 
 ## @brief Executes the stored operation and updates the result
 #  @param chain True if part of a chained operation
 #  @return Displays result or error message
+#
+#  Based on the stored operator and the current input, this function performs the corresponding math operation using math_lib. 
+#  It formats the result and updates both the history and input labels accordingly
+#  It also handles chaining if another operator follows right after evaluation.
 
 def handle_equal(chain=False):
     global current_input, operand, current_operator, history_input, just_evaluated
@@ -201,6 +226,9 @@ def handle_equal(chain=False):
 
 ## @brief Handles absolute value operation (|x|)
 #  @return Updates input label with absolute value
+#
+#  Calls math_lib.absolute() and replaces current_input with the result.
+#  Used for |x| button.
 
 def handle_abs():
     global current_input, just_evaluated
@@ -216,6 +244,9 @@ def handle_abs():
 
 ## @brief Handles factorial operation (!)
 #  @return Updates input label with factorial result
+#
+#  Converts current_input to int and uses math_lib.factorial().
+#  Shows error if the number is negative or not an integer.
 
 def handle_fact():
     global current_input, just_evaluated
@@ -253,3 +284,6 @@ input_label.config(text="0")
 ## @brief Start the tkinter main event loop
 window.mainloop()
 
+## TODO
+# @todo Fix operand "-" so it can be always put in front of all numbers, not just in front of the first number (-42 * -42)
+# @todo Make all buttons the same size
