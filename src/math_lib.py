@@ -133,16 +133,25 @@ def n_power(number1, number2):
 #
 #  Function n_root() takes two numbers and calculates the number2 root of number1
 #  This function raises ValueError if not using natural numbers in the exponents of root
+#  Allows negative radicands only if the root degree is odd.
 #
 #  @param number1 Radicand of root
 #  @param number2 Degree of root
 #  @return Value of nth root for the given numbers
 def n_root(number1, number2):
 
-    if number2 <= 0: 
+    if number2 <= 0:
         raise ValueError("The radical n must be a natural number")
 
-    if not float(number2).is_integer(): #checks if number is natural
+    if not float(number2).is_integer():
         raise ValueError("The radical n must be a natural number")
-    
-    return number1**(1/number2)
+
+    number2 = int(number2)
+
+    if number1 < 0 and number2 % 2 == 1:
+        return -((-number1) ** (1 / number2))  # real-valued odd root of negative number
+
+    if number1 < 0:
+        raise ValueError("Even root of negative number is not a real number")
+
+    return number1 ** (1 / number2)
