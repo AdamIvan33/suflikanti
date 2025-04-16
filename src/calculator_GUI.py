@@ -53,10 +53,10 @@ input_label.pack(fill="x")
 #  @brief Rows represent groups of calculator buttons
 buttons = [
     ["C", "⌫", "", "", ""],
-    ["7", "8", "9", "/", "√"],
-    ["4", "5", "6", "*", "^"],
-    ["1", "2", "3", "-", "!"],
-    ["0", "%", "=", "+", "|x|"]
+    ["7", "8", "9", "^", "√"],
+    ["4", "5", "6", "/", "-"],
+    ["1", "2", "3", "*", "+"],
+    ["0", "%", "!", "|x|", "="]
 ]
 
 ## Frame to contain the button grid
@@ -268,6 +268,16 @@ def handle_fact():
     except Exception as e:
         input_label.config(text="Error")
         show_error(str(e))
+
+## @brief Makes all the buttons the same size
+rows = len(buttons)
+cols = max(len(row) for row in buttons)
+
+for i in range(rows):
+    button_frame.grid_rowconfigure(i, weight=1, uniform="equal")
+
+for i in range(cols):
+    button_frame.grid_columnconfigure(i, weight=1, uniform="equal")
 
 ## @brief Create and place calculator buttons
 for row_index, row in enumerate(buttons):
