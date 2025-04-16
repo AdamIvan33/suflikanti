@@ -7,7 +7,7 @@ Windows 64bit
 Autori
 ------
 
-Nazev tymu
+Šuflikanti
 - xcechvj00 Juraj Čechvala
 - xivanad00 Adam Ivan
 - xmezeim00 Martin Mezei 
