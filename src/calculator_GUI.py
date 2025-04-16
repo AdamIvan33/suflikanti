@@ -66,12 +66,12 @@ button_frame.pack(expand=True, fill="both")
 
 ## Configure the rows and columns of the button grid to expand equally
 for i in range(len(buttons)):
-    button_frame.grid_rowconfigure(i, weight=1)
+    button_frame.grid_rowconfigure(i, weight=1, uniform="equal")
 
 if buttons:
     num_cols = len(buttons[0])
     for j in range(num_cols):
-        button_frame.grid_columnconfigure(j, weight=1)
+        button_frame.grid_columnconfigure(j, weight=1, uniform="equal")
 
 ## @brief Converts float to int if it's a whole number
 #  @param n The number to format
@@ -268,16 +268,6 @@ def handle_fact():
     except Exception as e:
         input_label.config(text="Error")
         show_error(str(e))
-
-## @brief Makes all the buttons the same size
-rows = len(buttons)
-cols = max(len(row) for row in buttons)
-
-for i in range(rows):
-    button_frame.grid_rowconfigure(i, weight=1, uniform="equal")
-
-for i in range(cols):
-    button_frame.grid_columnconfigure(i, weight=1, uniform="equal")
 
 ## @brief Create and place calculator buttons
 for row_index, row in enumerate(buttons):
