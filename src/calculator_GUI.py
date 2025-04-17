@@ -37,7 +37,17 @@ window.config(background="#E79A3F")
 #  @brief This section contains two labels stacked vertically
 
 display_frame = Frame(window, bg="#E79A3F")
-display_frame.pack(fill="x", padx=10, pady=10)
+display_frame.pack(fill="x", padx=0, pady=10)
+
+## Outer frame to modify the height of the buttons
+# @brief Frame to limit button area
+outer_frame = Frame(window, bg="#E79A3F")
+outer_frame.pack(expand=False, fill="x")
+
+# @brief Frame to contain the button grid
+button_frame = Frame(outer_frame, bg="#E79A3F", height=200)
+button_frame.pack(expand=False, fill="both")
+
 
 ## Label showing the previously entered values or result history
 #  Located on the top of the display_frame
@@ -52,11 +62,11 @@ input_label.pack(fill="x")
 ## Calculator Button Grid Layout
 #  @brief Rows represent groups of calculator buttons
 buttons = [
-    ["C", "⌫", "", "", ""],
+    ["C", "⌫", "%", "", ""],
     ["7", "8", "9", "^", "√"],
     ["4", "5", "6", "/", "-"],
     ["1", "2", "3", "*", "+"],
-    ["0", "%", "!", "|x|", "="]
+    ["0", ".", "!", "|x|", "="]
 ]
 
 ## Frame to contain the button grid
@@ -79,7 +89,7 @@ for i in range(max(len(row) for row in buttons)):
 def keypress_handler(event):
     key = event.char
     special = event.keysym
-    if key in "0123456789+-*/%^=":
+    if key in "0123456789+-*/%^=.":
         update_input(key)
     elif key == "\r":  # Enter
         update_input("=")
@@ -96,6 +106,7 @@ def keypress_handler(event):
     elif key == "√":
         update_input("√")
 
+
 ## Bind the keyboard input to the calculator
 window.bind("<Key>", keypress_handler)
 
@@ -109,8 +120,28 @@ def format_number(n):
 ## @brief Show error in popup message window
 #  @param message Error message to display
 
+## @brief Show error in popup message window and flash whole window background red
+#  @param message Error message to display
 def show_error(message):
+    original_color = "#E79A3F"
+    error_color = "red"
+    window.config(bg=error_color)
+    display_frame.config(bg=error_color)
+    button_frame.config(bg=error_color)
+    history_label.config(bg=error_color)
+    input_label.config(bg=error_color)
+
+    window.after(300, reset_background)  # after 300ms reset colors
     messagebox.showerror("Calculation Error", message)
+
+## @brief Resets the window background to normal after error flash
+def reset_background():
+    normal_bg = "#E79A3F"
+    window.config(bg=normal_bg)
+    display_frame.config(bg=normal_bg)
+    button_frame.config(bg=normal_bg)
+    history_label.config(bg=normal_bg)
+    input_label.config(bg=normal_bg)
 
 ## @brief Clears all calculator state and resets display
 
@@ -146,6 +177,8 @@ def update_input(value):
 
     if just_evaluated and value not in {"C", "⌫"}:
         clear_all()
+    if input_label.cget("text") == "Error" and value not in {"C", "⌫"}:
+        clear_all()
     if value == "C":
         clear_all()
     elif value == "⌫":
@@ -158,10 +191,11 @@ def update_input(value):
         handle_abs()
     elif value == "!":
         handle_fact()
-    elif value.isdigit() or (value == "-" and (not current_input or current_input == "-")):
+    elif value.isdigit() or value == "." or (value == "-" and (not current_input or current_input == "-")):
         handle_digit(value)
 
     input_label.config(text=current_input if current_input else "0")
+
 
 ## @brief Appends digit or sign to current input string
 #  @param digit The string representing the digit (0–9) or negative sign ('-')
@@ -170,11 +204,17 @@ def update_input(value):
 # Allow toggling minus sign at the beginning
 def handle_digit(digit):
     global current_input
-    
-    if digit == "-" and current_input == "-":
+
+    if digit == ".":
+        if "." not in current_input:
+            if not current_input or current_input == "-":
+                current_input += "0"  # If dot is first, prepend 0
+            current_input += "."
+    elif digit == "-" and current_input == "-":
         current_input = ""
     else:
         current_input += digit
+
 
 ## @brief Handles operator button press and stores operand/operator
 #  @param op Operator character pressed
