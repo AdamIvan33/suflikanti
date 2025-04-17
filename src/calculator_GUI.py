@@ -53,10 +53,10 @@ input_label.pack(fill="x")
 #  @brief Rows represent groups of calculator buttons
 buttons = [
     ["C", "⌫", "", "", ""],
-    ["7", "8", "9", "/", "√"],
-    ["4", "5", "6", "*", "^"],
-    ["1", "2", "3", "-", "!"],
-    ["0", "%", "=", "+", "|x|"]
+    ["7", "8", "9", "^", "√"],
+    ["4", "5", "6", "/", "-"],
+    ["1", "2", "3", "*", "+"],
+    ["0", "%", "!", "|x|", "="]
 ]
 
 ## Frame to contain the button grid
@@ -66,12 +66,38 @@ button_frame.pack(expand=True, fill="both")
 
 ## Configure the rows and columns of the button grid to expand equally
 for i in range(len(buttons)):
-    button_frame.grid_rowconfigure(i, weight=1)
+    button_frame.grid_rowconfigure(i, weight=1, uniform="equal")
 
-if buttons:
-    num_cols = len(buttons[0])
-    for j in range(num_cols):
-        button_frame.grid_columnconfigure(j, weight=1)
+for i in range(max(len(row) for row in buttons)):
+    button_frame.grid_columnconfigure(i, weight=1, uniform="equal")
+
+## @brief Handle keyboard key presses
+#  @param event The event object from tkinter
+#
+#  This maps keyboard keys to calculator input
+
+def keypress_handler(event):
+    key = event.char
+    special = event.keysym
+    if key in "0123456789+-*/%^=":
+        update_input(key)
+    elif key == "\r":  # Enter
+        update_input("=")
+    elif key.lower() == "c":
+        update_input("C")
+    elif key == "\x08" or special == "BackSpace":  # Backspace
+        update_input("⌫")
+    elif key == "|":
+        update_input("|x|")
+    elif key == "!":
+        update_input("!")
+    elif key == "^":
+        update_input("^")
+    elif key == "√":
+        update_input("√")
+
+## Bind the keyboard input to the calculator
+window.bind("<Key>", keypress_handler)
 
 ## @brief Converts float to int if it's a whole number
 #  @param n The number to format
@@ -295,5 +321,4 @@ window.mainloop()
 
 ## TODO
 # @todo Add decimal numbers
-# @todo Make all buttons the same size
 # @todo Allow result usage after "="
