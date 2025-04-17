@@ -39,7 +39,7 @@ window.config(background="#E79A3F")
 display_frame = Frame(window, bg="#E79A3F")
 display_frame.pack(fill="x", padx=0, pady=10)
 
-## Outer frame to modify the height of the buttons
+## Outer frame to modify the height of the vertical height of the buttons
 # @brief Frame to limit button area
 outer_frame = Frame(window, bg="#E79A3F")
 outer_frame.pack(expand=False, fill="x")
@@ -352,6 +352,17 @@ for row_index, row in enumerate(buttons):
         )
         btn.grid(row=row_index, column=col_index, sticky="nsew", padx=2, pady=2)
 
+        ## Add hover effect
+        ## @param event object (button)
+        def on_enter(e):
+            e.widget['background'] = '#FFD180'
+
+        def on_leave(e):
+            e.widget['background'] = '#FFE0B2'
+
+        btn.bind("<Enter>", on_enter)
+        btn.bind("<Leave>", on_leave)
+
 ## @brief Initialize the label displays
 history_label.config(text=history_input)
 input_label.config(text="0")
@@ -360,5 +371,4 @@ input_label.config(text="0")
 window.mainloop()
 
 ## TODO
-# @todo Add decimal numbers
 # @todo Allow result usage after "="
