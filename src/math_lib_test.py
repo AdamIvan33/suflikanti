@@ -9,7 +9,7 @@ import pytest
 ])
 
 def test_n_power(a,b,expected):
-    assert math_lib.n_root(a,b) == expected
+    assert math_lib.n_power(a,b) == expected
 
     assert round(math_lib.n_power(2.5, 2), 5) == 6.25
 
