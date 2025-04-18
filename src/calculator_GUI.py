@@ -175,9 +175,7 @@ def backspace():
 def update_input(value):
     global just_evaluated
 
-    if just_evaluated and value not in {"C", "⌫"}:
-        clear_all()
-    if input_label.cget("text") == "Error" and value not in {"C", "⌫"}:
+    if just_evaluated and (value.isdigit() or value == "."):
         clear_all()
     if value == "C":
         clear_all()
@@ -195,6 +193,7 @@ def update_input(value):
         handle_digit(value)
 
     input_label.config(text=current_input if current_input else "0")
+    just_evaluated = False  # Always reset this after any input except "="
 
 
 ## @brief Appends digit or sign to current input string
@@ -223,16 +222,25 @@ def handle_digit(digit):
 #  then stores result as new operand and prepares for next input.
 #  Also supports using '-' to type negative numbers.
 # If the user is entering a negative number, allow '-' to be part of input
+# If "-" pressed and typing a new negative number
+# If operator already set but no second number typed, replace operator
 
 def handle_operator(op):
     global current_input, operand, current_operator, history_input, just_evaluated
 
-    
+   
     if op == "-" and (not current_input or current_input == "-"):
         handle_digit("-")
         return
 
-    if current_operator and current_input:
+    if current_operator and not current_input:
+        current_operator = op
+        if operand is not None:
+            history_input = f"{format_number(operand)}{op}"
+            history_label.config(text=history_input)
+        return
+
+    if operand is not None and current_operator and current_input:
         handle_equal(chain=True)
 
     if current_input:
@@ -298,6 +306,7 @@ def handle_equal(chain=False):
     except Exception as e:
         input_label.config(text="Error")
         show_error(str(e))
+        clear_all()
 
 ## @brief Handles absolute value operation (|x|)
 #  @return Updates input label with absolute value
@@ -308,6 +317,9 @@ def handle_equal(chain=False):
 def handle_abs():
     global current_input, just_evaluated
     try:
+        if operand is not None and current_operator and current_input:
+            handle_equal()
+
         if current_input:
             result = format_number(math_lib.absolute(float(current_input)))
             current_input = str(result)
@@ -316,6 +328,7 @@ def handle_abs():
     except Exception as e:
         input_label.config(text="Error")
         show_error(str(e))
+        clear_all()
 
 ## @brief Handles factorial operation (!)
 #  @return Updates input label with factorial result
@@ -326,14 +339,22 @@ def handle_abs():
 def handle_fact():
     global current_input, just_evaluated
     try:
+        if operand is not None and current_operator and current_input:
+            handle_equal()
+
         if current_input:
-            result = math_lib.factorial(int(float(current_input)))
+            value = float(current_input)
+            if not value.is_integer():
+                raise ValueError("Factorial only defined for integers")
+            result = math_lib.factorial(int(value))
             current_input = str(format_number(result))
             input_label.config(text=current_input)
             just_evaluated = True
     except Exception as e:
         input_label.config(text="Error")
         show_error(str(e))
+        clear_all()
+
 
 ## @brief Create and place calculator buttons
 for row_index, row in enumerate(buttons):
