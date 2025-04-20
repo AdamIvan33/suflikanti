@@ -28,7 +28,8 @@ EXE_PATH     = dist/$(EXE_NAME)
 ## Default target: create venv and install dependencies once
 all: $(VENV) deps
 	@echo "Environment ready: venv created and dependencies installed."
-
+	@echo -e "\033[1;36m\033[3mPlease run 'source venv/bin/activate' to activate the virtual environment.\033[0m"
+	
 ## Create virtual environment directory (only if missing)
 $(VENV):
 	@echo "Creating virtual environment..."
