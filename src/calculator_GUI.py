@@ -10,8 +10,13 @@ import os
 import sys
 import math_lib
 
+## Determine the correct path for assets depending on whether it's running from source or a bundled executable
+if getattr(sys, 'frozen', False):
+    script_dir = sys._MEIPASS
+else:
+    script_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
+
 ## Set working directory to the script's directory to ensure assets like logo.png load correctly
-script_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
 os.chdir(script_dir)
 
 ## Calculator State Variables
@@ -44,7 +49,7 @@ display_frame.pack(fill="x", padx=0, pady=10)
 outer_frame = Frame(window, bg="#E79A3F")
 outer_frame.pack(expand=False, fill="x")
 
-# @brief Frame to contain the button grid
+## @brief Frame to contain the button grid
 button_frame = Frame(outer_frame, bg="#E79A3F", height=200)
 button_frame.pack(expand=False, fill="both")
 
