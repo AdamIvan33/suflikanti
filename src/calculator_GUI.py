@@ -286,7 +286,7 @@ def handle_equal(chain=False):
             elif op == "%":
                 result = math_lib.modulo(operand, second)
             elif op == "^":
-                result = math_lib.n_power(operand, int(second))
+                result = math_lib.n_power(operand, second)
             elif op == "√":
                 result = math_lib.n_root(second, int(operand))
             else:

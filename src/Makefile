@@ -8,7 +8,7 @@
 PYTHON       = python3
 VENV         = venv
 ZIP_NAME     = xcechvj00_xivanad00_xmezeim00_xurbans00.zip
-FILES        = calculator_GUI.py math_lib.py math_lib_test.py profiling.cpp requirements.txt Doxyfile Makefile logo.png
+FILES        = calculator_GUI.py math_lib.py math_lib_test.py profiling.py requirements.txt Doxyfile Makefile logo.png
 DOXYFILE     = Doxyfile
 
 ## Detect operating system
@@ -28,7 +28,7 @@ EXE_PATH     = dist/$(EXE_NAME)
 ## Default target: create venv and install dependencies once
 all: $(VENV) deps
 	@echo "Environment ready: venv created and dependencies installed."
-	@echo -e "\033[1;36m\033[3mPlease run 'source venv/bin/activate' to activate the virtual environment.\033[0m"
+	@echo "\033[1;36m\033[3mPlease run 'source venv/bin/activate' to activate the virtual environment.\033[0m"
 	
 ## Create virtual environment directory (only if missing)
 $(VENV):
@@ -73,17 +73,18 @@ pack: $(VENV)
 
 ## Clean project directory, preserving venv
 clean:
-	@echo "Cleaning up files (Linux/Unix)..."
-	@# Build find exclude arguments
+	@echo "Cleaning project files..."
+	$(RMDIR) $(VENV)
 	@exclude_files=""
 	$(foreach file,$(FILES),$(eval exclude_files += ! -name '$(file)' ))
 	find . -maxdepth 1 -type f $(exclude_files) -delete
-	find . -maxdepth 1 -type d \( ! -name '.' ! -name '$(VENV)' \) -exec rm -rf {} +
-	$(RMDIR) $(VENV)
+	find . -maxdepth 1 -type d \( ! -name '.' ! -name '$(VENV)' ! -name 'dist' \) -exec rm -rf {} +
+
 
 ## Placeholder for standard deviation profiling setup (no reinstall)
 stddev: $(VENV)
 	@echo "Preparing for stddev profiling..."
+	$(VENV_PYTHON) profiling.py
 
 ## Rebuild venv and deps from scratch
 rebuild:
@@ -97,7 +98,10 @@ $(EXE_PATH): calculator_GUI.py math_lib.py | $(VENV)
 	$(VENV_PYTHON) -m PyInstaller --onefile --name $(basename $(EXE_NAME)) --add-data "logo.png:." calculator_GUI.py
 
 install: $(EXE_PATH)
-	@echo "Executable created at $(EXE_PATH)"
+	@printf "\033[1;32mExecutable created at $(EXE_PATH)\033[0m\n"
+	@printf "\033[1;34mInstallation successful!\033[0m\n"
+	@printf "\033[1;36mMove to dist directory with: \033[1;33mcd dist\033[0m\n"
+	@printf "\033[1;35mRun the application with: \033[1;33m./calculator\033[0m\n"
 
 ## Uninstall: delete the executable and build files
 uninstall:
@@ -107,16 +111,17 @@ uninstall:
 
 ## Help message 
 help:
-	@echo "Makefile Help:"
-	@echo "  all       - Create venv and install dependencies"  
-	@echo "  deps      - Install dependencies into venv"  
-	@echo "  run       - Run the main script inside venv"  
-	@echo "  test      - Run tests inside venv"  
-	@echo "  lint      - Lint code inside venv"  
-	@echo "  upd_req   - Regenerate requirements.txt from venv"  
-	@echo "  doc       - Generate documentation with Doxygen"  
-	@echo "  pack      - Zip up project files"  
-	@echo "  clean     - Clean artifacts (venv preserved)"  
-	@echo "  stddev    - Stddev profiling setup (placeholder)"  
-	@echo "  rebuild   - Delete and recreate venv and deps"  
-	@echo "  help      - Show this message"
+	@printf "\033[1;36mAvailable make commands:\033[0m\n"
+	@printf "  \033[1;33mall\033[0m       - Create venv and install dependencies\n"
+	@printf "  \033[1;33mrun\033[0m       - Run the program inside venv\n"
+	@printf "  \033[1;33mtest\033[0m      - Run unit tests\n"
+	@printf "  \033[1;33mlint\033[0m      - Run linting with flake8\n"
+	@printf "  \033[1;33mupd_req\033[0m   - Update requirements.txt\n"
+	@printf "  \033[1;33mdoc\033[0m       - Generate Doxygen docs\n"
+	@printf "  \033[1;33mpack\033[0m      - Zip project files\n"
+	@printf "  \033[1;33mclean\033[0m     - Clean up files (except venv)\n"
+	@printf "  \033[1;33mstddev\033[0m    - Calculate standard deviation\n"
+	@printf "  \033[1;33mrebuild\033[0m   - Delete venv and reinstall everything\n"
+	@printf "  \033[1;33minstall\033[0m   - Build executable with PyInstaller\n"
+	@printf "  \033[1;33muninstall\033[0m - Remove executable and build files\n"
+
