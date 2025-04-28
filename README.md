@@ -2,7 +2,6 @@ Prostredi
 ---------
 
 Ubuntu 64bit
-Windows 64bit
 
 Autori
 ------
@@ -11,9 +10,9 @@ Autori
 - xcechvj00 Juraj Čechvala
 - xivanad00 Adam Ivan
 - xmezeim00 Martin Mezei 
-- xurbans00 Šimon Urban_
+- xurbans00 Šimon Urban
 
 Licence
 -------
 
-Tento program je poskytovan...
+Tento program je poskytovan GNU General Public Licence v3 (GPLv3)
