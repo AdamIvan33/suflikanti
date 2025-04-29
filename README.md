@@ -1,4 +1,4 @@
-Prostredi
+Prostredie
 ---------
 
 Ubuntu 64bit
@@ -12,7 +12,7 @@ Autori
 - xmezeim00 Martin Mezei 
 - xurbans00 Šimon Urban
 
-Licence
+Licencia
 -------
 
-Tento program je poskytovan GNU General Public Licence v3 (GPLv3)
+Tento program je poskytovaný licenciou GNU General Public Licence v3 (GPLv3)
