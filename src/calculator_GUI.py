@@ -117,12 +117,19 @@ def keypress_handler(event):
 ## Bind the keyboard input to the calculator
 window.bind("<Key>", keypress_handler)
 
-## @brief Converts float to int if it's a whole number
+## @brief Format number based on magnitude: integer, float, or scientific.
 #  @param n The number to format
 #  @return Integer if whole number, otherwise rounded float
 
 def format_number(n):
-    return int(n) if float(n).is_integer() else round(n, 8)
+    """Format number based on magnitude: integer, float, or scientific."""
+    if abs(n) >= 1e10 or (abs(n) < 1e-4 and n != 0):
+        return "{:.6e}".format(n)
+    elif float(n).is_integer():
+        return int(n)
+    else:
+        return round(n, 8)
+
 
 ## @brief Show error in popup message window
 #  @param message Error message to display
@@ -363,63 +370,36 @@ def handle_fact():
 
 ## @brief Function to show the help message in a custom popup window
 def show_help():
-    # Create the root window (it will be hidden)
-    root = Tk()
-    root.withdraw()  # Hide the main window
+    help_message = (
+        "🧮 Calculator Help Guide\n\n"
+        
+        "🔹 **Basic Controls**\n"
+        "  • C     – Clear all input and reset state\n"
+        "  • ⌫     – Delete the last character\n"
+        "  • =     – Evaluate the current expression\n"
+        "  • .     – Decimal point\n"
+        "  • |x|   – Absolute value of the number\n"
+        "  • !     – Factorial (only non-negative integers)\n"
+        "  • ?     – Show this help window\n\n"
 
-    # Create a new Toplevel window for the help message popup
-    top = Toplevel(root)
-    top.title("Calculator Help")
+        "🔹 **Binary Operations** (require two operands)\n"
+        "  • +     – Addition\n"
+        "  • -     – Subtraction\n"
+        "  • *     – Multiplication\n"
+        "  • /     – Division (raises error if divisor is 0)\n"
+        "  • %     – Modulo (remainder of division)\n"
+        "  • ^     – Exponentiation (x to the power of n)\n"
+        "  • √     – n-th root (x-th root of a number)\n\n"
 
-    # Set the size of the popup window
-    top.geometry("500x700")
+        "🔹 **Notes**\n"
+        "  • Use '.' for decimal numbers.\n"
+        "  • Results are shown in scientific notation for very large or small values.\n"
+        "  • Negative bases with even roots will raise an error (no real result).\n"
+        "  • Factorial is only defined for whole numbers ≥ 0.\n"
+        "  • Press any digit or operator after '=' to start a new calculation.\n"
+    )
+    messagebox.showinfo("Calculator Help", help_message)
 
-    # Help message with newlines and each letter will have a shade of red-black
-    help_message = """Ein
-Dos
-Trios
-Ne
-Fem
-Liu
-Execution"""
-
-    # List of red-black shades
-    shades_of_red = [
-        "#8B0000", "#A52A2A", "#B22222", "#DC143C", "#FF0000", "#FF6347", 
-        "#FF4500", "#D2691E", "#B8860B", "#8B4513", "#A52A2A", "#800000"
-    ]
-    
-    # Frame to hold the labels
-    frame = Frame(top)
-    frame.pack(padx=10, pady=10)
-
-    # Loop through each line in the help message
-    for line in help_message.splitlines():
-        line_frame = Frame(frame)
-        line_frame.pack(pady=5)
-
-        # Loop through each character in the line and apply color from the shades list
-        for i, letter in enumerate(line):
-            color = shades_of_red[i % len(shades_of_red)]  # Cycle through shades of red-black
-
-            # Create the label for each character with bold, italic, and the respective color
-            label = Label(line_frame, text=letter, font=('Helvetica', 48, 'bold italic'), fg=color)
-            label.pack(side=LEFT)
-
-    # Start the main loop to display the window
-    top.mainloop()
-
-#def show_help():
-#    help_message = (
-#        "Ein"
-#        "Dos"
-#       "Trios"
-#        "Ne"
-#       "Fem"
-#        "Liu"
-#        "Execution"
-#    )
-#    messagebox.showinfo("Calculator Help", help_message)
 
 ## Assign colors to individual buttons
 number_color = "#b39e8d"
@@ -499,6 +479,3 @@ input_label.config(text="0")
 
 ## @brief Start the tkinter main event loop
 window.mainloop()
-
-## TODO
-# @todo Allow result usage after "="
