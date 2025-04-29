@@ -69,11 +69,11 @@ input_label.pack(fill="x")
 
 
 buttons = [
-    ["?", "⌫", "C", "!", "%"],
+    ["?", "⌫", "C", "n!", "%"],
     ["7", "8", "9", "+", "-"],
     ["4", "5", "6", "*", "/"],
     ["1", "2", "3", "√", "^"],
-    [".", "0", "|x|", "="]
+    [",", "0", "|x|", "="]
 ]
 
 ## Frame to contain the button grid
@@ -372,39 +372,40 @@ def show_help():
     top.title("Calculator Help")
 
     # Set the size of the popup window
-    top.geometry("500x700")
+    top.geometry("600x600")
 
-    # Help message with newlines and each letter will have a shade of red-black
-    help_message = """Ein
-Dos
-Trios
-Ne
-Fem
-Liu
-Execution"""
+    # Help message with newlines
+    help_message = """ C 	Clears the display.
+⌫ 	Deletes last digit.
+ =	Shows the result.
+|X|	Computes the absolute value.
+ ,	Decimal point.
+ n!	Factorial of a non-negative integer.
 
-    # List of red-black shades
-    shades_of_red = [
-        "#8B0000", "#A52A2A", "#B22222", "#DC143C", "#FF0000", "#FF6347", 
-        "#FF4500", "#D2691E", "#B8860B", "#8B4513", "#A52A2A", "#800000"
-    ]
-    
-    # Frame to hold the labels
+---Binary operations---
+
+ %	Modulo (the remainder of division).
+ ^	To the power of N.
+ √	N-th root.
+ *	Multiplication.
+ /	Division.
+ +	Addition.
+ -	Subtraction."""
+
+    # Frame to hold the label
     frame = Frame(top)
-    frame.pack(padx=10, pady=10)
+    frame.pack(padx=20, pady=20, expand=True, fill='both')
 
-    # Loop through each line in the help message
-    for line in help_message.splitlines():
-        line_frame = Frame(frame)
-        line_frame.pack(pady=5)
-
-        # Loop through each character in the line and apply color from the shades list
-        for i, letter in enumerate(line):
-            color = shades_of_red[i % len(shades_of_red)]  # Cycle through shades of red-black
-
-            # Create the label for each character with bold, italic, and the respective color
-            label = Label(line_frame, text=letter, font=('Helvetica', 48, 'bold italic'), fg=color)
-            label.pack(side=LEFT)
+    # Label parameters
+    label = Label(
+        frame,
+        text=help_message,
+        font=('Fira Code', 16),
+        fg='black',
+        justify='left',
+        anchor='w'
+    )
+    label.pack(expand=True, fill='both')
 
     # Start the main loop to display the window
     top.mainloop()
@@ -437,9 +438,9 @@ button_colors = {
     "-": operand_color,
     "+": operand_color,
     "=": special_2_color,
-    "!": operand_color,
+    "n!": operand_color,
     "|x|": special_2_color,
-    ".": special_2_color,
+    ",": special_2_color,
     "0": number_color,
     "1": number_color,
     "2": number_color,
