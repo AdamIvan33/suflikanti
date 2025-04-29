@@ -22,8 +22,9 @@ RM = rm -f
 RMDIR = rm -rf
 
 EXE_PATH     = dist/$(EXE_NAME)
+PROFILING_EXE_PATH = dist/profiling
 
-.PHONY: all deps run test lint upd_req doc pack clean stddev help rebuild build_exe remove_exe
+.PHONY: all deps run test lint upd_req doc pack clean stddev help rebuild build_exe remove_exe install_profiling uninstall_profiling
 
 ## Default target: create venv and install dependencies once
 all: $(VENV) deps
@@ -75,6 +76,7 @@ pack: $(VENV)
 clean:
 	@echo "Cleaning project files..."
 	$(RMDIR) $(VENV)
+	$(RMDIR) dist
 	@exclude_files=""
 	$(foreach file,$(FILES),$(eval exclude_files += ! -name '$(file)' ))
 	find . -maxdepth 1 -type f $(exclude_files) -delete
@@ -108,20 +110,46 @@ uninstall:
 	@echo "Removing executable..."
 	$(RM) $(EXE_PATH)
 	$(RMDIR) build/ $(basename $(EXE_NAME)).spec
+	@printf "\033[1;31mcalculator executable and build files removed.\033[0m\n"
+
+## Install profiling.py as a standalone executable
+install_profiling: $(PROFILING_EXE_PATH)
+	@printf "\033[1;32mExecutable created at $(PROFILING_EXE_PATH)\033[0m\n"
+	@printf "\033[1;34mInstallation successful!\033[0m\n"
+	@printf "\033[1;36mMove to dist directory with: \033[1;33mcd dist\033[0m\n"
+	@printf "\033[1;35mRun the profiling tool with: \033[1;33m./profiling\033[0m\n"
+
+$(PROFILING_EXE_PATH): profiling.py | $(VENV)
+	@echo "Building profiling executable..."
+	$(VENV_PYTHON) -m pip install --upgrade pyinstaller
+	$(VENV_PYTHON) -m PyInstaller --onefile --name profiling profiling.py
+
+## Uninstall profiling executable
+uninstall_profiling:
+	@echo "Removing profiling executable..."
+	$(RM) dist/profiling
+	$(RMDIR) build/
+	$(RM) profiling.spec
+	@printf "\033[1;31mprofiling executable and build files removed.\033[0m\n"
+
+
 
 ## Help message 
 help:
 	@printf "\033[1;36mAvailable make commands:\033[0m\n"
-	@printf "  \033[1;33mall\033[0m       - Create venv and install dependencies\n"
-	@printf "  \033[1;33mrun\033[0m       - Run the program inside venv\n"
-	@printf "  \033[1;33mtest\033[0m      - Run unit tests\n"
-	@printf "  \033[1;33mlint\033[0m      - Run linting with flake8\n"
-	@printf "  \033[1;33mupd_req\033[0m   - Update requirements.txt\n"
-	@printf "  \033[1;33mdoc\033[0m       - Generate Doxygen docs\n"
-	@printf "  \033[1;33mpack\033[0m      - Zip project files\n"
-	@printf "  \033[1;33mclean\033[0m     - Clean up files (except venv)\n"
-	@printf "  \033[1;33mstddev\033[0m    - Calculate standard deviation\n"
-	@printf "  \033[1;33mrebuild\033[0m   - Delete venv and reinstall everything\n"
-	@printf "  \033[1;33minstall\033[0m   - Build executable with PyInstaller\n"
-	@printf "  \033[1;33muninstall\033[0m - Remove executable and build files\n"
+	@printf "  \033[1;33mall\033[0m       		- Create venv and install dependencies\n"
+	@printf "  \033[1;33mrun\033[0m       		- Run the program inside venv\n"
+	@printf "  \033[1;33mtest\033[0m      		- Run unit tests\n"
+	@printf "  \033[1;33mlint\033[0m      		- Run linting with flake8\n"
+	@printf "  \033[1;33mupd_req\033[0m   		- Update requirements.txt\n"
+	@printf "  \033[1;33mdoc\033[0m       		- Generate Doxygen docs\n"
+	@printf "  \033[1;33mpack\033[0m      		- Zip project files\n"
+	@printf "  \033[1;33mclean\033[0m     		- Clean up files (except venv)\n"
+	@printf "  \033[1;33mstddev\033[0m    		- Calculate standard deviation\n"
+	@printf "  \033[1;33mrebuild\033[0m   		- Delete venv and reinstall everything\n"
+	@printf "  \033[1;33minstall\033[0m   		- Build calculator executable with PyInstaller\n"
+	@printf "  \033[1;33muninstall\033[0m 		- Remove calculator executable and build files\n"
+	@printf "  \033[1;33minstall_profiling\033[0m 	- Build profiling executable with PyInstaller\n"
+	@printf "  \033[1;33muninstall_profiling\033[0m 	- Remove profiling executable and build files\n"
+
 

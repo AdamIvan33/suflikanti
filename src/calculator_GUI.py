@@ -36,48 +36,50 @@ window.title("Calculator")
 # Set application background colour
 icon = PhotoImage(file='logo.png')
 window.iconphoto(True, icon)
-window.config(background="#E79A3F")
+window.config(background="#a68d8d")
 
 ## Display Frame for history and current input
 #  @brief This section contains two labels stacked vertically
 
-display_frame = Frame(window, bg="#E79A3F")
+display_frame = Frame(window, bg="#a68d8d")
 display_frame.pack(fill="x", padx=0, pady=10)
 
 ## Outer frame to modify the height of the vertical height of the buttons
 # @brief Frame to limit button area
-outer_frame = Frame(window, bg="#E79A3F")
+outer_frame = Frame(window, bg="#a68d8d")
 outer_frame.pack(expand=False, fill="x")
 
 ## @brief Frame to contain the button grid
-button_frame = Frame(outer_frame, bg="#E79A3F", height=200)
+button_frame = Frame(outer_frame, bg="#a68d8d", height=125)
 button_frame.pack(expand=False, fill="both")
 
 
 ## Label showing the previously entered values or result history
 #  Located on the top of the display_frame
-history_label = Label(display_frame, text=history_input, anchor="e", font=("Arial", 16), bg="#E79A3F", fg="#444")
+history_label = Label(display_frame, text=history_input, anchor="e", font=("Arial", 26), bg="#a68d8d", fg="#444")
 history_label.pack(fill="x")
 
 ## Label showing the current number input or result
 #  Located on the bottom of the display_frame
-input_label = Label(display_frame, text="0", anchor="e", font=("Arial", 32), bg="#E79A3F", fg="#000")
+input_label = Label(display_frame, text="0", anchor="e", font=("Arial", 40), bg="#a68d8d", fg="#000")
 input_label.pack(fill="x")
 
 ## Calculator Button Grid Layout
 #  @brief Rows represent groups of calculator buttons
+
+
 buttons = [
-    ["C", "⌫", "%", "", ""],
-    ["7", "8", "9", "^", "√"],
-    ["4", "5", "6", "/", "-"],
-    ["1", "2", "3", "*", "+"],
-    ["0", ".", "!", "|x|", "="]
+    ["?", "⌫", "C", "!", "%"],
+    ["7", "8", "9", "+", "-"],
+    ["4", "5", "6", "*", "/"],
+    ["1", "2", "3", "√", "^"],
+    [".", "0", "|x|", "="]
 ]
 
 ## Frame to contain the button grid
 #  Pack buttons so they fill out the frame
-button_frame = Frame(window, bg="#E79A3F")
-button_frame.pack(expand=True, fill="both")
+button_frame = Frame(window, bg="#a68d8d")
+button_frame.pack(expand=True, fill="both", padx=8, pady=8)
 
 ## Configure the rows and columns of the button grid to expand equally
 for i in range(len(buttons)):
@@ -128,25 +130,22 @@ def format_number(n):
 ## @brief Show error in popup message window and flash whole window background red
 #  @param message Error message to display
 def show_error(message):
-    original_color = "#E79A3F"
+    original_color = "#a68d8d"
     error_color = "red"
-    window.config(bg=error_color)
-    display_frame.config(bg=error_color)
     button_frame.config(bg=error_color)
-    history_label.config(bg=error_color)
-    input_label.config(bg=error_color)
 
-    window.after(300, reset_background)  # after 300ms reset colors
+
+    window.after(300, reset_background)
     messagebox.showerror("Calculation Error", message)
+
+
 
 ## @brief Resets the window background to normal after error flash
 def reset_background():
-    normal_bg = "#E79A3F"
-    window.config(bg=normal_bg)
-    display_frame.config(bg=normal_bg)
+    normal_bg = "#a68d8d"
     button_frame.config(bg=normal_bg)
-    history_label.config(bg=normal_bg)
-    input_label.config(bg=normal_bg)
+
+
 
 ## @brief Clears all calculator state and resets display
 
@@ -194,6 +193,8 @@ def update_input(value):
         handle_abs()
     elif value == "!":
         handle_fact()
+    elif value == "?":
+        show_help()
     elif value.isdigit() or value == "." or (value == "-" and (not current_input or current_input == "-")):
         handle_digit(value)
 
@@ -360,34 +361,137 @@ def handle_fact():
         show_error(str(e))
         clear_all()
 
+## @brief Function to show the help message in a custom popup window
+def show_help():
+    # Create the root window (it will be hidden)
+    root = Tk()
+    root.withdraw()  # Hide the main window
+
+    # Create a new Toplevel window for the help message popup
+    top = Toplevel(root)
+    top.title("Calculator Help")
+
+    # Set the size of the popup window
+    top.geometry("500x700")
+
+    # Help message with newlines and each letter will have a shade of red-black
+    help_message = """Ein
+Dos
+Trios
+Ne
+Fem
+Liu
+Execution"""
+
+    # List of red-black shades
+    shades_of_red = [
+        "#8B0000", "#A52A2A", "#B22222", "#DC143C", "#FF0000", "#FF6347", 
+        "#FF4500", "#D2691E", "#B8860B", "#8B4513", "#A52A2A", "#800000"
+    ]
+    
+    # Frame to hold the labels
+    frame = Frame(top)
+    frame.pack(padx=10, pady=10)
+
+    # Loop through each line in the help message
+    for line in help_message.splitlines():
+        line_frame = Frame(frame)
+        line_frame.pack(pady=5)
+
+        # Loop through each character in the line and apply color from the shades list
+        for i, letter in enumerate(line):
+            color = shades_of_red[i % len(shades_of_red)]  # Cycle through shades of red-black
+
+            # Create the label for each character with bold, italic, and the respective color
+            label = Label(line_frame, text=letter, font=('Helvetica', 48, 'bold italic'), fg=color)
+            label.pack(side=LEFT)
+
+    # Start the main loop to display the window
+    top.mainloop()
+
+#def show_help():
+#    help_message = (
+#        "Ein"
+#        "Dos"
+#       "Trios"
+#        "Ne"
+#       "Fem"
+#        "Liu"
+#        "Execution"
+#    )
+#    messagebox.showinfo("Calculator Help", help_message)
+
+## Assign colors to individual buttons
+number_color = "#b39e8d"
+operand_color = "#ed842f"
+special_1_color = "#c45252"
+special_2_color = "#93d9d7"
+button_colors = {
+    "C": special_1_color,
+    "⌫": special_1_color,
+    "%": operand_color,
+    "^": operand_color,
+    "√": operand_color,
+    "/": operand_color,
+    "*": operand_color,
+    "-": operand_color,
+    "+": operand_color,
+    "=": special_2_color,
+    "!": operand_color,
+    "|x|": special_2_color,
+    ".": special_2_color,
+    "0": number_color,
+    "1": number_color,
+    "2": number_color,
+    "3": number_color,
+    "4": number_color,
+    "5": number_color,
+    "6": number_color,
+    "7": number_color,
+    "8": number_color,
+    "9": number_color,
+    "?": special_1_color
+}
 
 ## @brief Create and place calculator buttons
+# Loop for button creation
+# Creates buttons with their assigned colors, default color if not found
 for row_index, row in enumerate(buttons):
     for col_index, label in enumerate(row):
         if not label:
-            continue  # Skip empty placeholders
+            continue
+        
+        btn_color = button_colors.get(label, "#F9E0AE")
+
         btn = Button(
             button_frame,
             text=label,
             font=("Arial", 18),
-            bg="#F9E0AE",
-            activebackground="#F0C674",
-            relief=RAISED,
-            bd=3,
+            bg=btn_color,
+            activebackground="#FFD180",
+            relief=FLAT,
+            bd=0,
+            highlightthickness=0,
+            padx=10, pady=10,
             command=lambda val=label: update_input(val)
         )
-        btn.grid(row=row_index, column=col_index, sticky="nsew", padx=2, pady=2)
 
-        ## Add hover effect
-        ## @param event object (button)
+        btn.original_bg = btn_color
+
+        if label == "=":
+            btn.grid(row=row_index, column=col_index, columnspan=2, sticky="nsew", padx=2, pady=2)
+        else:
+            btn.grid(row=row_index, column=col_index, sticky="nsew", padx=2, pady=2)
+
         def on_enter(e):
             e.widget['background'] = '#FFD180'
 
         def on_leave(e):
-            e.widget['background'] = '#FFE0B2'
+            e.widget['background'] = e.widget.original_bg
 
         btn.bind("<Enter>", on_enter)
         btn.bind("<Leave>", on_leave)
+
 
 ## @brief Initialize the label displays
 history_label.config(text=history_input)
