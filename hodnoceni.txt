@@ -1,4 +1,4 @@
-xlogin01 100 (základ GUI a základní mat. operace)
-xlogin02 100 (pokročilé mat. operace)
-xlogin03 90 (profiling, instalátor)
-xlogin04 110 (testy, dokumentace)
+xmezeim00 97 (testy, časť mat. knižnice, profiling, mockup)
+xcechvj00 96 (časť GUI, profiling, Makefile)
+xurbans00 110 (GUI, inštalátor/odinštalátor, dokumentácia, Makefile)
+xivanad00 97 (testy, časť mat. knižnice, dokumentácia)
