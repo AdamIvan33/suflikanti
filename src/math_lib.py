@@ -9,7 +9,6 @@
 ##
 #  @brief Adds two numbers
 #
-#  Function add() takes two numbers as input and adds them
 #
 #  @param number1 First number of addition
 #  @param number2 Second number of addition
@@ -18,12 +17,11 @@ def add(number1, number2):
     return number1 + number2
 
 ##
-#  @brief Substracts two numbers
+#  @brief Subtracts two numbers
 #
-#  Function sub() takes two numbers as input and substracts them
 #
-#  @param number1 First number of substraction
-#  @param number2 Second number of substraction
+#  @param number1 First number of subtraction
+#  @param number2 Second number of subtraction
 #  @return Difference of number1 and number2
 def sub(number1, number2):
     return number1 - number2
@@ -31,8 +29,7 @@ def sub(number1, number2):
 ##
 #  @brief Divides two numbers
 #
-#  Function div() takes two numbers as input and divides them
-#  If zero division is attempted ZeroDivisionError is raised
+#  If zero division is attempted ZeroDivisionError is raised.
 #
 #  @param number1 Dividend
 #  @param number2 Divisor
@@ -46,8 +43,6 @@ def div(number1, number2):
 
 ##
 #  @brief Multiplies two numbers
-#
-#  Function mult() takes two numbers as input and multiplies them
 #
 #  @param number1 First number of multiplication
 #  @param number2 Second number of multiplication
@@ -70,8 +65,7 @@ def absolute(number):
 ##
 #  @brief Calculates factorial of a number
 #
-#  Function factorial() takes one number which is either 0 or a natural number and calculates its factorial
-#  If a calculation with a number that is not 0 or natural is attempted ValueError is raised
+#  If a calculation with a number that is not 0 or natural is attempted, ValueError is raised.
 #   
 #  @param number Argument of factorial function
 #  @return Value of factorial for the given number
@@ -88,7 +82,7 @@ def factorial(number):
 
     rValue = 1 #return value
 
-    for currentNum in range(2,number+1): #rValue does not have to be multiplied by 1 and cannot be multiplied by 0, so for starts at 2
+    for currentNum in range(2,number+1): #rValue does not have to be multiplied by 1 and cannot be multiplied by 0, so for loop starts at 2
         rValue = mult(rValue,currentNum)
 
     return rValue
@@ -96,11 +90,10 @@ def factorial(number):
 ##
 #  @brief Calculates remainder after division
 #
-#  Function modulo() takes two numbers and returns the remainder after division
-#  As in the div() function, returns ZeroDivisionError if using modulo with 0
+#  If zero division is attempted ZeroDivisionError is raised.
 #
-#  @param number1 First number in division
-#  @param number2 Second number in division
+#  @param number1 First number of division
+#  @param number2 Second number of division
 #  @return Remainder after division
 def modulo(number1, number2):
     
@@ -112,8 +105,7 @@ def modulo(number1, number2):
 ##
 #  @brief Calculates the natural power of number
 #
-#  Function n_power() takes two numbers and calculates number1 to the power of number2
-#  This function raises ValueError if not using natural numbers in exponents
+#  If a non-natural number si given, ValueError is raised.
 #
 #  @param number1 Base of exponentiation
 #  @param number2 Exponent of exponentiation
@@ -129,15 +121,15 @@ def n_power(number1, number2):
     return number1**number2
 
 ##
-#  @brief Calculates the natural root  of number
+#  @brief Calculates the natural root of a number
 #
-#  Function n_root() takes two numbers and calculates the number2 root of number1
-#  This function raises ValueError if not using natural numbers in the exponents of root
+#  Function takes two numbers and calculates the number2 root of number1.
+#  If the root degree is not a natural number, ValueError is raised.
 #  Allows negative radicands only if the root degree is odd.
 #
 #  @param number1 Radicand of root
-#  @param number2 Degree of root
-#  @return Value of nth root for the given numbers
+#  @param number2 Root Degree
+#  @return Value of the nth root for given numbers
 def n_root(number1, number2):
 
     if number2 <= 0:

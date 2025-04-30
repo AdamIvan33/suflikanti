@@ -44,7 +44,7 @@ window.config(background="#a68d8d")
 display_frame = Frame(window, bg="#a68d8d")
 display_frame.pack(fill="x", padx=0, pady=10)
 
-## Outer frame to modify the height of the vertical height of the buttons
+## Outer frame to modify the height of buttons
 # @brief Frame to limit button area
 outer_frame = Frame(window, bg="#a68d8d")
 outer_frame.pack(expand=False, fill="x")
@@ -88,10 +88,10 @@ for i in range(len(buttons)):
 for i in range(max(len(row) for row in buttons)):
     button_frame.grid_columnconfigure(i, weight=1, uniform="equal")
 
-## @brief Handle keyboard key presses
+## @brief Handles keyboard key presses
 #  @param event The event object from tkinter
 #
-#  This maps keyboard keys to calculator input
+#  Maps keyboard keys to calculator input
 
 def keypress_handler(event):
     key = event.char
@@ -119,7 +119,7 @@ window.bind("<Key>", keypress_handler)
 
 ## @brief Format number based on magnitude: integer, float, or scientific.
 #  @param n The number to format
-#  @return Integer if whole number, otherwise rounded float
+#  @return An integer if the input is a whole number, otherwise a rounded float
 
 def format_number(n):
     """Format number based on magnitude: integer, float, or scientific."""
@@ -130,11 +130,7 @@ def format_number(n):
     else:
         return round(n, 8)
 
-
-## @brief Show error in popup message window
-#  @param message Error message to display
-
-## @brief Show error in popup message window and flash whole window background red
+## @brief Shows an error in popup message window and flash whole window background red
 #  @param message Error message to display
 def show_error(message):
     original_color = "#a68d8d"
@@ -166,7 +162,7 @@ def clear_all():
     input_label.config(text="0")
     history_label.config(text=history_input)
 
-## @brief Removes last character from current input
+## @brief Removes the last character from the current input
 
 def backspace():
     global current_input
@@ -209,11 +205,11 @@ def update_input(value):
     just_evaluated = False  # Always reset this after any input except "="
 
 
-## @brief Appends digit or sign to current input string
+## @brief Appends a digit or a sign to the current input string
 #  @param digit The string representing the digit (0–9) or negative sign ('-')
 #
 #  Builds up the number the user is typing. Called each time the user clicks a digit.
-# Allow toggling minus sign at the beginning
+# Allows toggling minus sign at the beginning
 def handle_digit(digit):
     global current_input
 
@@ -228,7 +224,7 @@ def handle_digit(digit):
         current_input += digit
 
 
-## @brief Handles operator button press and stores operand/operator
+## @brief Handles the operator button press and stores the operand/operator
 #  @param op Operator character pressed
 #
 #  Evaluates any existing operation if operand and operator are already set,
@@ -269,7 +265,7 @@ def handle_operator(op):
 
 ## @brief Executes the stored operation and updates the result
 #  @param chain True if part of a chained operation
-#  @return Displays result or error message
+#  @return Displays the result or an error message
 #
 #  Based on the stored operator and the current input, this function performs the corresponding math operation using math_lib. 
 #  It formats the result and updates both the history and input labels accordingly
@@ -433,7 +429,7 @@ button_colors = {
     "?": special_1_color
 }
 
-## @brief Create and place calculator buttons
+## @brief Creates and places calculator buttons
 # Loop for button creation
 # Creates buttons with their assigned colors, default color if not found
 for row_index, row in enumerate(buttons):
